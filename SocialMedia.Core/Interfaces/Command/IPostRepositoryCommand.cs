@@ -1,10 +1,10 @@
 using System.Threading.Tasks;
-using SocialMedia.Core.DTOs.Query;
+using SocialMedia.Core.DTOs.Command;
 
 namespace SocialMedia.Core.Interfaces.Command
 {
-  public interface IPostRepositoryCommand
-  {
-    Task<int> AddPost(PostDTO model);
-  }
+    public interface IPostRepositoryCommand
+    {
+        Task<int> AddPost(AddPostDTO model);
+    }
 }

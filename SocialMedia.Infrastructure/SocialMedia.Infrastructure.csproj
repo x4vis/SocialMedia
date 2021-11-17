@@ -11,8 +11,28 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="FluentValidation.AspNetCore" Version="10.3.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Mappers\" />
+    <None Remove="Mappers\Request\" />
+    <None Remove="Mappers\Response\" />
+    <None Remove="Filters\" />
+    <None Remove="Validators\" />
+    <None Remove="FluentValidation.AspNetCore" />
+    <None Remove="Validators\Command\" />
+    <None Remove="Validators\Query\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Mappers\" />
+    <Folder Include="Mappers\Command\" />
+    <Folder Include="Mappers\Query\" />
+    <Folder Include="Filters\" />
+    <Folder Include="Validators\" />
+    <Folder Include="Validators\Command\" />
+    <Folder Include="Validators\Query\" />
+  </ItemGroup>
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
