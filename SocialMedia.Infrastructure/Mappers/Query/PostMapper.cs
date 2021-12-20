@@ -5,15 +5,15 @@ namespace SocialMedia.Infrastructure.Mappers.Query
 {
     public class PostMapper
     {
-        public static PostDTO FromDataModel(Post entity)
+        public static PostDTO FromDataModel(Post model)
         {
-            return entity == null ? null : new PostDTO
+            return model == null ? null : new PostDTO
             {
-                PostId = entity.PostId,
-                UserId = entity.UserId,
-                Date = entity.Date,
-                Description = entity.Description,
-                Image = entity.Image
+                PostId = model.PostId,
+                UserId = model.UserId,
+                Date = model.Date,
+                Description = model.Description,
+                Image = model.Image
             };
         }
     }
