@@ -6,7 +6,7 @@ namespace SocialMedia.Core.Interfaces.Query
 {
   public interface IPostRepositoryQuery
   {
-    Task<IEnumerable<PostDTO>> GetPosts();
-    Task<PostDTO> GetPost(int id);
+    Task<IEnumerable<PostDTO>> GetPostsAsync();
+    Task<PostDTO> GetPostAsync(int id);
   }
 }
