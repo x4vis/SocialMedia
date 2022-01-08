@@ -13,30 +13,30 @@ namespace SocialMedia.API.Controllers
     [Route("api/[controller]")]
     public class PostController : ControllerBase
     {
-        private readonly IPostRepositoryQuery _postRepositoryQuery;
-        private readonly IPostRepositoryCommand _postRepositoryCommand;
+        private readonly IPostCommandService _postCommandService;
+        private readonly IPostQueryRepository _postQueryRepository;
 
         public PostController
         (
-            IPostRepositoryQuery postRepositoryquery,
-            IPostRepositoryCommand repositoryCommand
+            IPostCommandService postCommandService,
+            IPostQueryRepository postQueryRepository
         )
         {
-            _postRepositoryQuery = postRepositoryquery;
-            _postRepositoryCommand = repositoryCommand;
+            _postCommandService = postCommandService;
+            _postQueryRepository = postQueryRepository;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PostDTO>>> GetPosts()
         {
-            var posts = await _postRepositoryQuery.GetPostsAsync();
+            var posts = await _postQueryRepository.GetPostsAsync();
             return Ok(posts);
         }
 
         [HttpGet("{id:int}")]
         public async Task<ActionResult<PostDTO>> GetPost(int id)
         {
-            var post = await _postRepositoryQuery.GetPostAsync(id);
+            var post = await _postQueryRepository.GetPostAsync(id);
 
             if (post == null)
             {
@@ -48,7 +48,7 @@ namespace SocialMedia.API.Controllers
         [HttpPost]
         public async Task<ActionResult> AddPost(AddPostDTO model)
         {
-            var postAdded = await _postRepositoryCommand.AddPostAsync(model);
+            var postAdded = await _postCommandService.AddPostAsync(model);
 
             switch (postAdded)
             {
@@ -64,7 +64,7 @@ namespace SocialMedia.API.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdatePost(int postId, UpdatePostDTO model)
         {
-            var postUpdated = await _postRepositoryCommand.UpdatePostAsync(postId, model);
+            var postUpdated = await _postCommandService.UpdatePostAsync(postId, model);
 
             switch (postUpdated)
             {
@@ -82,7 +82,7 @@ namespace SocialMedia.API.Controllers
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeletePost(int id)
         {
-            var postDeleted = await _postRepositoryCommand.DeletePostAsync(id);
+            var postDeleted = await _postCommandService.DeletePostAsync(id);
 
             switch (postDeleted)
             {
