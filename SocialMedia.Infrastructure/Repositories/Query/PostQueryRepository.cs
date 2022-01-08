@@ -5,15 +5,15 @@ using SocialMedia.Infrastructure.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using SocialMedia.Core.DTOs.Query;
-using SocialMedia.Infrastructure.Mappers.Query;
+using SocialMedia.Core.Mappers.Query;
 
 namespace SocialMedia.Infrastructure.Repositories.Query
 {
-    public class PostRepositoryQuery : IPostRepositoryQuery
+    public class PostQueryRepository : IPostQueryRepository
     {
         private readonly SocialMediaContext _context;
 
-        public PostRepositoryQuery(SocialMediaContext context)
+        public PostQueryRepository(SocialMediaContext context)
         {
             _context = context;
         }
@@ -23,7 +23,7 @@ namespace SocialMedia.Infrastructure.Repositories.Query
             var query = _context.Posts;
             var list = await query
                 .AsNoTracking()
-                .Select(e => PostMapper.FromDataModel(e))
+                .Select(e => PostQueryMapper.FromDataModel(e))
                 .ToListAsync();
 
             return list;
@@ -34,7 +34,7 @@ namespace SocialMedia.Infrastructure.Repositories.Query
             var query = _context.Posts;
             var post = await query.FindAsync(id);
 
-            return PostMapper.FromDataModel(post);
+            return PostQueryMapper.FromDataModel(post);
         }
     }
 }
