@@ -6,8 +6,16 @@
 
   <ItemGroup>
     <None Remove="Enums\" />
+    <None Remove="Services\" />
+    <None Remove="Services\Command\" />
+    <None Remove="Services\Query\" />
+    <None Remove="Mappers\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Enums\" />
+    <Folder Include="Services\" />
+    <Folder Include="Services\Command\" />
+    <Folder Include="Services\Query\" />
+    <Folder Include="Mappers\" />
   </ItemGroup>
 </Project>
