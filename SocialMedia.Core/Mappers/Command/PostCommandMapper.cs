@@ -1,9 +1,9 @@
 ﻿using SocialMedia.Core.DTOs.Command;
 using SocialMedia.Core.Entities;
 
-namespace SocialMedia.Infrastructure.Mappers.Command
+namespace SocialMedia.Core.Mappers.Command
 {
-    public class AddPostMapper
+    public class PostCommandMapper
     {
         public static Post ToDataModel(AddPostDTO dto)
         {

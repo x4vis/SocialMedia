@@ -15,7 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Mappers\" />
     <None Remove="Mappers\Request\" />
     <None Remove="Mappers\Response\" />
     <None Remove="Filters\" />
@@ -25,9 +24,6 @@
     <None Remove="Validators\Query\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Mappers\" />
-    <Folder Include="Mappers\Command\" />
-    <Folder Include="Mappers\Query\" />
     <Folder Include="Filters\" />
     <Folder Include="Validators\" />
     <Folder Include="Validators\Command\" />

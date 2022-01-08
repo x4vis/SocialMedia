@@ -1,9 +1,9 @@
 ﻿using SocialMedia.Core.DTOs.Query;
 using SocialMedia.Core.Entities;
 
-namespace SocialMedia.Infrastructure.Mappers.Query
+namespace SocialMedia.Core.Mappers.Query
 {
-    public class PostMapper
+    public class PostQueryMapper
     {
         public static PostDTO FromDataModel(Post model)
         {
