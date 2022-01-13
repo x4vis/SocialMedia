@@ -18,22 +18,20 @@ namespace SocialMedia.Infrastructure.Repositories.Query
             _context = context;
         }
 
-        public async Task<IEnumerable<PostDTO>> GetPostsAsync()
+        public async Task<List<PostDTO>> GetPostsAsync()
         {
-            var query = _context.Posts;
-            var list = await query
+            var query = _context.Posts
                 .AsNoTracking()
-                .Select(e => PostQueryMapper.FromDataModel(e))
-                .ToListAsync();
+                .Select(e => PostQueryMapper.FromDataModel(e));
+
+            var list = await query.ToListAsync();
 
             return list;
         }
 
         public async Task<PostDTO> GetPostAsync(int id)
         {
-            var query = _context.Posts;
-            var post = await query.FindAsync(id);
-
+            var post = await _context.Posts.FindAsync(id);
             return PostQueryMapper.FromDataModel(post);
         }
     }
