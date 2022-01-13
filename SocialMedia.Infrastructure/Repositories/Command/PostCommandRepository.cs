@@ -5,7 +5,7 @@ using SocialMedia.Core.Interfaces.Command;
 using SocialMedia.Infrastructure.Data.Context;
 using SocialMedia.Core.DTOs.Command;
 using SocialMedia.Core.Enums;
-using SocialMedia.Core.Entities;
+using SocialMedia.Core.Mappers.Command;
 
 namespace SocialMedia.Infrastructure.Repositories.Commands
 {
@@ -18,18 +18,27 @@ namespace SocialMedia.Infrastructure.Repositories.Commands
             _context = context;
         }
 
-        public async Task<int> AddPostAsync(Post model)
-        {
-            _context.Add(model);
-            var rowsAffected = await _context.SaveChangesAsync();
-            return rowsAffected;
-        }
-
-        public async Task<UpdateOrDeleteResource> UpdatePostAsync(int postId, UpdatePostDTO model)
+        public async Task<SaveResource> AddPostAsync(AddPostDTO model)
         {
             try
             {
-                var currentPost = await _context.Posts.FindAsync(postId);
+                var dataModel = PostCommandMapper.ToDataModel(model);
+                _context.Add(model);
+                var rowsAffected = await _context.SaveChangesAsync();
+                return rowsAffected > 0 ? SaveResource.Saved : SaveResource.NotSaved;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"An error has ocurred while adding a post ==> {ex}");
+                return SaveResource.Error;
+            }
+        }
+
+        public async Task<UpdateOrDeleteResource> UpdatePostAsync(UpdatePostDTO model)
+        {
+            try
+            {
+                var currentPost = await _context.Posts.FindAsync(model.Id);
 
                 if (currentPost == null)
                 {
