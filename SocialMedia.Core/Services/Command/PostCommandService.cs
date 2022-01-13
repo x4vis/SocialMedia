@@ -1,10 +1,7 @@
-﻿using System;
-using System.Diagnostics;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using SocialMedia.Core.DTOs.Command;
 using SocialMedia.Core.Enums;
 using SocialMedia.Core.Interfaces.Command;
-using SocialMedia.Core.Mappers.Command;
 
 namespace SocialMedia.Core.Services.Command
 {
@@ -19,17 +16,17 @@ namespace SocialMedia.Core.Services.Command
 
         public async Task<SaveResource> AddPostAsync(AddPostDTO model)
         {
-            try
-            {
-                var dataModel = PostCommandMapper.ToDataModel(model);
-                var rowsAffected = await _postCommandRepository.AddPostAsync(dataModel);
-                return rowsAffected > 0 ? SaveResource.Saved : SaveResource.NotSaved;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"An error has ocurred while adding a post ==> {ex}");
-                return SaveResource.Error;
-            }
+            return await _postCommandRepository.AddPostAsync(model);
+        }
+
+        public async Task<UpdateOrDeleteResource> UpdatePostAsync(UpdatePostDTO model)
+        {
+            return await _postCommandRepository.UpdatePostAsync(model);
+        }
+
+        public async Task<UpdateOrDeleteResource> DeletePostAsync(int postId)
+        {
+            return await _postCommandRepository.DeletePostAsync(postId);
         }
     }
 }
