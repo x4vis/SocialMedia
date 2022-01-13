@@ -41,7 +41,7 @@ namespace SocialMedia.API
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "SocialMedia.API", Version = "v1" });
             });
 
-            services.AddTransient<IPostQueryRepository, PostQueryRepository>();
+            services.AddTransient<IPostQueryService, PostQueryRepository>();
             services.AddTransient<IPostCommandRepository, PostCommandRepository>();
             services.AddTransient<IPostCommandService, PostCommandService>();
 
