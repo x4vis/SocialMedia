@@ -1,10 +1,12 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using SocialMedia.Core.DTOs.Query;
+
 namespace SocialMedia.Core.Interfaces.Query
 {
-    public class IPostQueryService
+    public interface IPostQueryService
     {
-        public IPostQueryService()
-        {
-        }
+        Task<List<PostDTO>> GetPostsAsync();
+        Task<PostDTO> GetPostAsync(int id);
     }
 }

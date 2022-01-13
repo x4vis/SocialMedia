@@ -1,10 +1,10 @@
-﻿using System;
+﻿using System.Threading.Tasks;
+using SocialMedia.Core.Entities;
+
 namespace SocialMedia.Core.Interfaces.Query
 {
-    public class IUserQueryRepository
+    public interface IUserQueryRepository
     {
-        public IUserQueryRepository()
-        {
-        }
+        Task<User> GetUserAsync(int id);
     }
 }

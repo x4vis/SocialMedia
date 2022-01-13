@@ -4,9 +4,9 @@ using SocialMedia.Core.DTOs.Query;
 
 namespace SocialMedia.Core.Interfaces.Query
 {
-  public interface IPostQueryRepository
-  {
-    Task<IEnumerable<PostDTO>> GetPostsAsync();
-    Task<PostDTO> GetPostAsync(int id);
-  }
+    public interface IPostQueryRepository
+    {
+        Task<List<PostDTO>> GetPostsAsync();
+        Task<PostDTO> GetPostAsync(int id);
+    }
 }
