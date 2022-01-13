@@ -14,29 +14,29 @@ namespace SocialMedia.API.Controllers
     public class PostController : ControllerBase
     {
         private readonly IPostCommandService _postCommandService;
-        private readonly IPostQueryRepository _postQueryRepository;
+        private readonly IPostQueryService _postQueryService;
 
         public PostController
         (
             IPostCommandService postCommandService,
-            IPostQueryRepository postQueryRepository
+            IPostQueryService postQueryService
         )
         {
             _postCommandService = postCommandService;
-            _postQueryRepository = postQueryRepository;
+            _postQueryService = postQueryService;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<PostDTO>>> GetPosts()
+        public async Task<ActionResult<IList<PostDTO>>> GetPosts()
         {
-            var posts = await _postQueryRepository.GetPostsAsync();
+            var posts = await _postQueryService.GetPostsAsync();
             return Ok(posts);
         }
 
         [HttpGet("{id:int}")]
         public async Task<ActionResult<PostDTO>> GetPost(int id)
         {
-            var post = await _postQueryRepository.GetPostAsync(id);
+            var post = await _postQueryService.GetPostAsync(id);
 
             if (post == null)
             {
@@ -56,15 +56,17 @@ namespace SocialMedia.API.Controllers
                     return StatusCode(500, "The post could not be written in the DB, please try again");
                 case SaveResource.Error:
                     return StatusCode(500, "The post could not be saved, please try again");
-                default:
+                case SaveResource.Saved:
                     return NoContent();
+                default:
+                    return StatusCode(500);
             }
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdatePost(int postId, UpdatePostDTO model)
+        public async Task<IActionResult> UpdatePost(UpdatePostDTO model)
         {
-            var postUpdated = await _postCommandService.UpdatePostAsync(postId, model);
+            var postUpdated = await _postCommandService.UpdatePostAsync(model);
 
             switch (postUpdated)
             {
@@ -74,8 +76,10 @@ namespace SocialMedia.API.Controllers
                     return StatusCode(500, "The post could not be written in the DB, please try again");
                 case UpdateOrDeleteResource.Error:
                     return StatusCode(500, "The post could not be updated, please try again");
+                case UpdateOrDeleteResource.Written:
+                    return Ok();
                 default:
-                    return NoContent();
+                    return StatusCode(500);
             }
         }
 
@@ -92,8 +96,10 @@ namespace SocialMedia.API.Controllers
                     return StatusCode(500, "The post could not be written in the DB, please try again");
                 case UpdateOrDeleteResource.Error:
                     return StatusCode(500, "The post could not be deleted, please try again");
-                default:
+                case UpdateOrDeleteResource.Written:
                     return Ok();
+                default:
+                    return StatusCode(500);
             }
         }
     }
