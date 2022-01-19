@@ -9,7 +9,7 @@ namespace SocialMedia.Core.Mappers.Query
         {
             return model == null ? null : new PostDTO
             {
-                PostId = model.PostId,
+                Id = model.Id,
                 UserId = model.UserId,
                 Date = model.Date,
                 Description = model.Description,

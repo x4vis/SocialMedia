@@ -9,7 +9,7 @@ namespace SocialMedia.Core.Mappers.Command
         {
             return dto == null ? null : new Post
             {
-                UserId = dto.UserId,
+                Id = dto.Id,
                 Date = dto.Date,
                 Description = dto.Description,
                 Image = dto.Image
