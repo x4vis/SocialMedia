@@ -1,10 +1,10 @@
 using System;
+using SocialMedia.Core.Entities;
 
 namespace SocialMedia.Core.DTOs.Query
 {
-    public class PostDTO
+    public class PostDTO : BaseEntity
     {
-        public int PostId { get; set; }
         public int UserId { get; set; }
         public DateTime Date { get; set; }
         public string Description { get; set; }
