@@ -8,11 +8,11 @@ namespace SocialMedia.Infrastructure.Data.Maps
   {
     public void Configure(EntityTypeBuilder<Comment> builder)
     {
-      builder.HasKey(e => e.CommentId);
+      builder.HasKey(e => e.Id);
 
       builder.ToTable("Comentario");
 
-      builder.Property(e => e.CommentId)
+      builder.Property(e => e.Id)
         .IsRequired()
         .HasColumnName("IdComentario")
         .ValueGeneratedNever();
