@@ -10,9 +10,9 @@ using Microsoft.OpenApi.Models;
 using SocialMedia.Core.Interfaces.Command;
 using SocialMedia.Core.Interfaces.Query;
 using SocialMedia.Core.Services.Command;
+using SocialMedia.Core.Services.Query;
 using SocialMedia.Infrastructure.Data.Context;
-using SocialMedia.Infrastructure.Repositories.Commands;
-using SocialMedia.Infrastructure.Repositories.Query;
+using SocialMedia.Infrastructure.Repositories.Command;
 
 namespace SocialMedia.API
 {
@@ -41,8 +41,8 @@ namespace SocialMedia.API
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "SocialMedia.API", Version = "v1" });
             });
 
-            services.AddTransient<IPostQueryService, PostQueryRepository>();
-            services.AddTransient<IPostCommandRepository, PostCommandRepository>();
+            services.AddScoped(typeof(IBaseCommandRepository<>), typeof(BaseCommandRepository<>));
+            services.AddTransient<IPostQueryService, PostQueryService>();
             services.AddTransient<IPostCommandService, PostCommandService>();
 
             services.AddMvc().AddFluentValidation(options =>
