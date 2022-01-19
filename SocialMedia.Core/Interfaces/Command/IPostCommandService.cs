@@ -6,8 +6,8 @@ namespace SocialMedia.Core.Interfaces.Command
 {
     public interface IPostCommandService
     {
-        Task<SaveResource> AddPostAsync(AddPostDTO model);
-        Task<UpdateOrDeleteResource> UpdatePostAsync(UpdatePostDTO model);
-        Task<UpdateOrDeleteResource> DeletePostAsync(int postId);
+        Task<WriteEntity> AddPostAsync(AddPostDTO model);
+        Task<WriteEntity> UpdatePostAsync(UpdatePostDTO model);
+        Task<WriteEntity> DeletePostAsync(int postId);
     }
 }
