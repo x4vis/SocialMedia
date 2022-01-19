@@ -1,9 +1,9 @@
 ﻿namespace SocialMedia.Core.Enums
 {
-    public enum SaveResource
+    public enum WriteEntity
     {
-        Saved,
-        NotSaved,
+        Written,
+        NotWritten,
         Error
     }
 }
