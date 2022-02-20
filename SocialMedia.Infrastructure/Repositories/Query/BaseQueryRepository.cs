@@ -16,26 +16,28 @@ namespace SocialMedia.Infrastructure.Repositories.Query
             _entity = context.Set<T>();
         }
 
-        public async Task<IEnumerable<T>> GetAllAsync(bool isTracked)
+        public async Task<IEnumerable<T>> GetAllAsync(bool isTracked = false)
         {
             if (isTracked)
             {
-                return await _entity.AsNoTracking().ToListAsync();
+                return await _entity.ToListAsync();
             }
 
-            return await _entity.ToListAsync();
+            return await _entity
+                .AsNoTracking()
+                .ToListAsync();
         }
 
-        public async Task<T> GetByIdAsync(int id, bool isTracked)
+        public async Task<T> GetByIdAsync(int id, bool isTracked = false)
         {
             if (isTracked)
             {
-                return await _entity
-                    .AsNoTracking()
-                    .FirstOrDefaultAsync(x => x.Id == id);
+                return await _entity.FindAsync(id);
             }
 
-            return await _entity.FindAsync(id);
+            return await _entity
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(x => x.Id == id);
         }
     }
 }

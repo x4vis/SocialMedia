@@ -6,7 +6,7 @@ namespace SocialMedia.Core.Interfaces.Query
 {
     public interface IBaseQueryRepository<T> where T : BaseEntity
     {
-        Task<IEnumerable<T>> GetAllAsync(bool isTracked);
-        Task<T> GetByIdAsync(int id, bool isTracked);
+        Task<IEnumerable<T>> GetAllAsync(bool isTracked = false);
+        Task<T> GetByIdAsync(int id, bool isTracked = false);
     }
 }

@@ -27,7 +27,7 @@ namespace SocialMedia.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IList<PostDTO>>> GetPosts()
+        public async Task<ActionResult<IEnumerable<PostDTO>>> GetPosts()
         {
             var posts = await _postQueryService.GetPostsAsync();
             return Ok(posts);
@@ -42,45 +42,43 @@ namespace SocialMedia.API.Controllers
             {
                 return NotFound();
             }
+
             return Ok(post);
         }
 
         [HttpPost]
-        public async Task<ActionResult> AddPost(AddPostDTO model)
+        public async Task<ActionResult> AddPost(AddPostDTO dto)
         {
-            var postAdded = await _postCommandService.AddPostAsync(model);
+            var postAdded = await _postCommandService.AddPostAsync(dto);
 
-            switch (postAdded)
+            return postAdded switch
             {
-                case SaveResource.NotSaved:
-                    return StatusCode(500, "The post could not be written in the DB, please try again");
-                case SaveResource.Error:
-                    return StatusCode(500, "The post could not be saved, please try again");
-                case SaveResource.Saved:
-                    return NoContent();
-                default:
-                    return StatusCode(500);
-            }
+                WriteEntity.Written => NoContent(),
+                WriteEntity.NotWritten => StatusCode(500, "The post could not be written in the DB, please try again"),
+                WriteEntity.Error => StatusCode(500, "The post could not be saved, please try again"),
+                _ => StatusCode(500),
+            };
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdatePost(UpdatePostDTO model)
+        public async Task<IActionResult> UpdatePost(UpdatePostDTO dto)
         {
-            var postUpdated = await _postCommandService.UpdatePostAsync(model);
+            var postDTO = await _postQueryService.GetPostAsync(dto.Id);
 
-            switch (postUpdated)
+            if (postDTO == null)
             {
-                case UpdateOrDeleteResource.NotFound:
-                    return NotFound();
-                case UpdateOrDeleteResource.NotWritten:
-                    return StatusCode(500, "The post could not be written in the DB, please try again");
-                case UpdateOrDeleteResource.Error:
-                    return StatusCode(500, "The post could not be updated, please try again");
-                case UpdateOrDeleteResource.Written:
-                    return Ok();
-                default:
-                    return StatusCode(500);
+                return NotFound();
             }
+
+            var postUpdated = await _postCommandService.UpdatePostAsync(dto, postDTO);
+
+            return postUpdated switch
+            {
+                UpdateOrDeleteResource.NotWritten => StatusCode(500, "The post could not be written in the DB, please try again"),
+                UpdateOrDeleteResource.Error => StatusCode(500, "The post could not be updated, please try again"),
+                UpdateOrDeleteResource.Written => Ok(),
+                _ => StatusCode(500),
+            };
         }
 
         [HttpDelete("{id:int}")]
@@ -88,19 +86,14 @@ namespace SocialMedia.API.Controllers
         {
             var postDeleted = await _postCommandService.DeletePostAsync(id);
 
-            switch (postDeleted)
+            return postDeleted switch
             {
-                case UpdateOrDeleteResource.NotFound:
-                    return NotFound();
-                case UpdateOrDeleteResource.NotWritten:
-                    return StatusCode(500, "The post could not be written in the DB, please try again");
-                case UpdateOrDeleteResource.Error:
-                    return StatusCode(500, "The post could not be deleted, please try again");
-                case UpdateOrDeleteResource.Written:
-                    return Ok();
-                default:
-                    return StatusCode(500);
-            }
+                UpdateOrDeleteResource.NotFound => NotFound(),
+                UpdateOrDeleteResource.NotWritten => StatusCode(500, "The post could not be written in the DB, please try again"),
+                UpdateOrDeleteResource.Error => StatusCode(500, "The post could not be deleted, please try again"),
+                UpdateOrDeleteResource.Written => Ok(),
+                _ => StatusCode(500),
+            };
         }
     }
 }
