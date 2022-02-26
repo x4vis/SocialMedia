@@ -1,4 +1,5 @@
-﻿using SocialMedia.Core.DTOs;
+﻿using System.Net;
+using SocialMedia.Core.DTOs;
 
 namespace SocialMedia.Core.Mappers
 {
@@ -6,16 +7,30 @@ namespace SocialMedia.Core.Mappers
     {
         public static APIResponse<T> BuildResponse(
             bool isSuccess,
-            string responseCode,
-            T payload,
-            string message = ""
+            HttpStatusCode statusCode,
+            T payload
         )
         {
             return new APIResponse<T>
             {
                 IsSuccess = isSuccess,
-                ResponseCode = responseCode,
-                Message = message,
+                StatusCode = statusCode,
+                Payload = payload
+            };
+        }
+
+        public static APIResponse<T> BuildResponse(
+            bool isSuccess,
+            HttpStatusCode statusCode,
+            T payload,
+            string ExceptionMessage
+        )
+        {
+            return new APIResponse<T>
+            {
+                IsSuccess = isSuccess,
+                StatusCode = statusCode,
+                ExceptionMessage = ExceptionMessage,
                 Payload = payload
             };
         }

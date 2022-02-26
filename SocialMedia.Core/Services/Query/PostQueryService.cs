@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using SocialMedia.Core.DTOs;
 using SocialMedia.Core.DTOs.Query;
@@ -14,10 +15,12 @@ namespace SocialMedia.Core.Services.Query
     public class PostQueryService : IPostQueryService
     {
         private readonly IBaseQueryRepository<Post> _postQueryRepository;
+        private HttpStatusCode httpStatusCode;
 
         public PostQueryService(IBaseQueryRepository<Post> postQueryRepository)
         {
             _postQueryRepository = postQueryRepository;
+            httpStatusCode = HttpStatusCode.OK;
         }
 
         public async Task<APIResponse<IEnumerable<PostDTO>>> GetPostsAsync()
@@ -25,19 +28,21 @@ namespace SocialMedia.Core.Services.Query
             try
             {
                 var posts = await _postQueryRepository.GetAllAsync();
-
-                if (posts == null)
+                var postsDTO = posts.Select(p => PostQueryMapper.FromDataModel(p));
+                                
+                if (postsDTO == null)
                 {
-                    return APIResponseMapper<IEnumerable<PostDTO>>
-                        .BuildResponse(false, "204", null);
+                    httpStatusCode = HttpStatusCode.NotFound;
                 }
-
-                posts.Select(p => PostQueryMapper.FromDataModel(p));
+                
+                return APIResponseMapper<IEnumerable<PostDTO>>
+                    .BuildResponse(postsDTO == null, httpStatusCode, postsDTO);
             }
             catch (Exception ex)
             {
+                httpStatusCode = HttpStatusCode.InternalServerError;
                 return APIResponseMapper<IEnumerable<PostDTO>>
-                    .BuildResponse(false, "204", null, ex.Message);
+                    .BuildResponse(false, httpStatusCode, null, ex.Message);
             }
         }
 
@@ -46,7 +51,15 @@ namespace SocialMedia.Core.Services.Query
             try
             {
                 var post = await _postQueryRepository.GetByIdAsync(id);
-                return PostQueryMapper.FromDataModel(post);
+                var postDTO = PostQueryMapper.FromDataModel(post);
+
+                if (postDTO == null)
+                {
+                    httpStatusCode = HttpStatusCode.NotFound;
+                }
+
+                return APIResponseMapper<PostDTO>
+                    .BuildResponse(true, httpStatusCode, postDTO);
             }
             catch (Exception ex)
             {

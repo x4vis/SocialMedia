@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using SocialMedia.Core.DTOs.Command;
 using SocialMedia.Core.DTOs.Query;
-using SocialMedia.Core.Enums;
 using SocialMedia.Core.Interfaces.Command;
 using SocialMedia.Core.Interfaces.Query;
 
