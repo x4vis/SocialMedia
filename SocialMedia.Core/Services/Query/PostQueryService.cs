@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using SocialMedia.Core.DTOs;
 using SocialMedia.Core.DTOs.Query;
@@ -15,38 +14,35 @@ namespace SocialMedia.Core.Services.Query
     public class PostQueryService : IPostQueryService
     {
         private readonly IBaseQueryRepository<Post> _postQueryRepository;
-        private HttpStatusCode httpStatusCode;
 
         public PostQueryService(IBaseQueryRepository<Post> postQueryRepository)
         {
             _postQueryRepository = postQueryRepository;
-            httpStatusCode = HttpStatusCode.OK;
         }
 
-        public async Task<APIResponse<IEnumerable<PostDTO>>> GetPostsAsync()
+        public async Task<Response<IEnumerable<PostDTO>>> GetPostsAsync()
         {
             try
             {
                 var posts = await _postQueryRepository.GetAllAsync();
                 var postsDTO = posts.Select(p => PostQueryMapper.FromDataModel(p));
-                                
+
                 if (postsDTO == null)
                 {
-                    httpStatusCode = HttpStatusCode.NotFound;
+                    postsDTO = Enumerable.Empty<PostDTO>();
                 }
-                
+
                 return APIResponseMapper<IEnumerable<PostDTO>>
-                    .BuildResponse(postsDTO == null, httpStatusCode, postsDTO);
+                    .BuildResponse(true, postsDTO);
             }
             catch (Exception ex)
             {
-                httpStatusCode = HttpStatusCode.InternalServerError;
                 return APIResponseMapper<IEnumerable<PostDTO>>
-                    .BuildResponse(false, httpStatusCode, null, ex.Message);
+                    .BuildResponse(false, null, ex.Message);
             }
         }
 
-        public async Task<APIResponse<PostDTO>> GetPostAsync(int id)
+        public async Task<Response<PostDTO>> GetPostAsync(int id)
         {
             try
             {
@@ -55,15 +51,16 @@ namespace SocialMedia.Core.Services.Query
 
                 if (postDTO == null)
                 {
-                    httpStatusCode = HttpStatusCode.NotFound;
+                    postDTO = new PostDTO();
                 }
 
                 return APIResponseMapper<PostDTO>
-                    .BuildResponse(true, httpStatusCode, postDTO);
+                    .BuildResponse(true, postDTO);
             }
             catch (Exception ex)
             {
-                return null;
+                return APIResponseMapper<PostDTO>
+                    .BuildResponse(false, null, ex.Message);
             }
         }
     }

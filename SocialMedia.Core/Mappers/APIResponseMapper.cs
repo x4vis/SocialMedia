@@ -5,33 +5,29 @@ namespace SocialMedia.Core.Mappers
 {
     public class APIResponseMapper<T>
     {
-        public static APIResponse<T> BuildResponse(
+        public static Response<T> BuildResponse(
             bool isSuccess,
-            HttpStatusCode statusCode,
-            T payload
+            T data
         )
         {
-            return new APIResponse<T>
+            return new Response<T>
             {
                 IsSuccess = isSuccess,
-                StatusCode = statusCode,
-                Payload = payload
+                Data = data
             };
         }
 
-        public static APIResponse<T> BuildResponse(
+        public static Response<T> BuildResponse(
             bool isSuccess,
-            HttpStatusCode statusCode,
-            T payload,
-            string ExceptionMessage
+            T data,
+            string message
         )
         {
-            return new APIResponse<T>
+            return new Response<T>
             {
                 IsSuccess = isSuccess,
-                StatusCode = statusCode,
-                ExceptionMessage = ExceptionMessage,
-                Payload = payload
+                Data = data,
+                Message = message,
             };
         }
     }
